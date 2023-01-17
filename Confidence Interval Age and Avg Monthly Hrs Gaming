@@ -1,0 +1,15 @@
+```{r}
+# read in the data from the CSV file and is assigned to the variable called data.
+data <- read_excel("C:/Users/iviic/OneDrive/Desktop/CA1/amalgamated_game_survey_250_2022 (1).xlsx")
+
+# creating a random sample of 200 records from the daya using the sample function
+sample <- data[sample(nrow(data), 200), ]
+
+# perform linear regression on age and avg_monthly_hrs_gaming using the sample 200 from survey
+model <- lm(avg_monthly_hrs_gaming ~ age, data = sample)
+
+# calculate the confidence intervals for age and avg_monthly_hrs_gaming using the function confint to calculate the 95% confidence interval for the coefficicents
+confint(model, level = 0.95)
+
+
+```
