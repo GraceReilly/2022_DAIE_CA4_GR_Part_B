@@ -1,0 +1,24 @@
+```{r}
+# load files reading data from excel file and ggplot to create plots
+library(readxl)
+library(ggplot2)
+
+# reading in the exel data from the excel file located on pc using the read_excel() function and asssigning to the variable data
+data <- read_excel("C:/Users/iviic/OneDrive/Desktop/CA1/amalgamated_game_survey_250_2022 (1).xlsx")
+
+# creating a sample dataset containing 200 rows of data from the data variable, using the sample to radomly select 200 rows 
+sample <- data[sample(nrow(data), 200), ]
+
+model <- lm(sample$avg_monthly_hrs_gaming ~ sample$age)
+
+# ggplot is used to create a scatter plot x being equal to age and y is equal to avg monthly hours 
+ggplot(data = sample, aes(x = age, y = avg_monthly_hrs_gaming)) +
+    geom_point(shape=16, size=3) +
+    geom_line(aes(y = predict(model))) +
+    labs(x = "Age", y = "Average monthly hours gaming", title = "Linear regression of average monthly hours gaming on age") +
+    scale_x_continuous(breaks = seq(20, 50, by = 2)) +
+    scale_y_continuous(breaks = seq(0, 60, by = 5))
+
+
+
+```
