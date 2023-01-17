@@ -1,0 +1,16 @@
+```{r}
+# read in the data from the Excel file and assigning it to the variable data
+data <- read_excel("C:/Users/iviic/OneDrive/Desktop/CA1/amalgamated_game_survey_250_2022 (1).xlsx")
+
+# selecting a random sample of 200 records from the data and assigning it to the variable sample
+set.seed(123)
+sample <- data[sample(nrow(data), 200), ]
+
+# adding in the ggplot command to create histograms of the age and avergae monthly hrs gaming, the histogram has 30 bins to divide the data into 30 groups for each histrogram
+ggplot(data = sample, aes(x = age, fill = "Age")) +
+geom_histogram(bins = 30) +
+labs(x = "Age", y = "Frequency", title = "Histogram of age")
+
+ggplot(data = sample, aes(x = avg_monthly_hrs_gaming, fill = "Average monthly hours spent gaming")) +
+geom_histogram(bins = 30) +
+labs(x = "Average monthly hours spent gaming", y = "Frequency", title = "Histogram of average monthly hours spent gaming")
