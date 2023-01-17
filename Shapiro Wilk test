@@ -1,0 +1,26 @@
+
+
+# adding in packages 
+library(ggplot2)
+library(readxl)
+
+# read in the data from the Excel file
+data <- read_excel("C:/Users/iviic/OneDrive/Desktop/CA1/amalgamated_game_survey_250_2022 (1).xlsx")
+
+# select a random sample of 200 records using the sample function 
+set.seed(123)
+sample <- data[sample(nrow(data), 200), ]
+
+# Shapiro-Wilk test for age variable from the Imtest package to test for normality 
+shapiro.test(sample$age)
+
+# Shapiro-Wilk test for avg_monthly_hrs_gaming variable
+shapiro.test(sample$avg_monthly_hrs_gaming)
+
+# create normal probability plot for age variable using the qqnorm andd qqline functions
+qqnorm(sample$age)
+qqline(sample$age)
+
+# create normal probability plot for avg_monthly_hrs_gaming variable
+qqnorm(sample$avg_monthly_hrs_gaming)
+qqline(sample$avg_monthly_hrs_gaming)
