@@ -1,0 +1,25 @@
+```
+# install and load the necessary packages
+library(lmtest)
+library(ggplot2)
+library(readxl)
+
+# read in the data from the Excel file on pc
+data <- read_excel("C:/Users/iviic/OneDrive/Desktop/CA1/amalgamated_game_survey_250_2022 (1).xlsx")
+
+# select a random sample of 200 records
+set.seed(123)
+sample <- data[sample(nrow(data), 200), ]
+
+# Fit a linear model using the Im function with avg_monthly_hrs_gaming as the response variable and age is the predictor 
+model <- lm(avg_monthly_hrs_gaming ~ age, data = sample)
+
+# using the residuals function to extract residuals 
+residuals <- residuals(model)
+
+# plot of the residuals to test for normality
+qqnorm(residuals, main = "Normal Probability Plot of Residuals", xlab = "Theoretical Quantiles", ylab = "Sample Quantiles")
+qqline(residuals)
+
+
+``` 
