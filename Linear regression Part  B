@@ -1,0 +1,187 @@
+---
+title: 2022 - MSc - Data Analytics for Immersive Environments - CA4 - RDBMS & Linear Regression Project Database design, SQL, and Linear Regression
+output:
+  pdf_document: default
+  html_document: default
+date: "2023-01-02"
+---
+
+# **Part B - Linear Regression Analysis**
+
+## Student Name - Grace Reilly / Student ID - D00232395
+
+## Contents :
+
+-   A: Introduction
+-   B: Histogram of average monthly hours of gaming and average age
+-   C: Confidence Interval
+-   D: Sharpio-Wilk Test
+-   E: Pearson Correlation Coefficient
+-   F: Average Linear Regression of average monthly hours gaming on age
+-   G: References
+
+### A: Introduction
+
+-   The two columns chosen to perform linear regression are age and avg_monthly_hrs_gaming as they have a relationship that can be quantified using linear equation. It can be assumed that as age increases, the avg_monthly_hrs gaming may also increase or decrease.
+
+### B: Histogram of average monthly hours of gaming and average age
+
+```{r echo=FALSE, warning=FALSE}
+library(readxl)
+library(ggplot2)
+# read in the data from the Excel file
+data <- read_excel("C:/Users/iviic/OneDrive/Desktop/CA1/amalgamated_game_survey_250_2022 (1).xlsx")
+
+# select a random sample of 200 records
+set.seed(123)
+sample <- data[sample(nrow(data), 200), ]
+
+ggplot(data = sample, aes(x = age, fill = "Age")) +
+geom_histogram(bins = 30) +
+labs(x = "Age", y = "Frequency", title = "Histogram of age")
+
+ggplot(data = sample, aes(x = avg_monthly_hrs_gaming, fill = "Average monthly hours spent gaming")) +
+geom_histogram(bins = 30) +
+labs(x = "Average monthly hours spent gaming", y = "Frequency", title = "Histogram of average monthly hours spent gaming")
+```
+
+### C: Confidence interval of average monthly hours gaming on age
+
+-   The confidence interval for the coefficient suggests that the relationship between the two variables is not highly significant within this sample.
+
+```{r echo=FALSE, warning=FALSE}
+# read in the data from the CSV file
+data <- read_excel("C:/Users/iviic/OneDrive/Desktop/CA1/amalgamated_game_survey_250_2022 (1).xlsx")
+
+# select a random sample of 200 records
+set.seed(123)
+sample <- data[sample(nrow(data), 200), ]
+
+# perform linear regression on age and avg_monthly_hrs_gaming
+model <- lm(avg_monthly_hrs_gaming ~ age, data = sample)
+
+# calculate the confidence intervals for age and avg_monthly_hrs_gaming
+confint(model, level = 0.95)
+
+
+```
+
+### D: Sharpio-Wilk test
+
+-   It appears that the data is uniform as the data points are spread out evenly across the graph.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+library(lmtest)
+library(ggplot2)
+library(readxl)
+
+# read in the data from the Excel file
+data <- read_excel("C:/Users/iviic/OneDrive/Desktop/CA1/amalgamated_game_survey_250_2022 (1).xlsx")
+
+# select a random sample of 200 records
+sample <- data[sample(nrow(data), 200), ]
+
+# Shapiro-Wilk test for age variable
+shapiro.test(sample$age)
+
+# Shapiro-Wilk test for avg_monthly_hrs_gaming variable
+shapiro.test(sample$avg_monthly_hrs_gaming)
+
+# create normal probability plot for age variable
+qqnorm(sample$age)
+qqline(sample$age)
+
+# create normal probability plot for avg_monthly_hrs_gaming variable
+qqnorm(sample$avg_monthly_hrs_gaming)
+qqline(sample$avg_monthly_hrs_gaming)
+
+
+```
+
+### 
+
+```{}
+```
+
+### E: Pearson correlation coefficient between age and average monthly hours spent gaming
+
+-   A Pearson correlation coefficient result of -0.059 indicates a very weak negative relationship between the two variables. This means that as the value of one variable increases, the value of the other variable decreases.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+# install and load the necessary packages
+install.packages(c("ggplot2"))
+library(ggplot2)
+library(readxl)
+
+# read in the data from the Excel file
+data <- read_excel("C:/Users/iviic/OneDrive/Desktop/CA1/amalgamated_game_survey_250_2022 (1).xlsx")
+
+# select a random sample of 200 records
+set.seed(123)
+sample <- data[sample(nrow(data), 200), ]
+
+# calculate the Pearson correlation coefficient between age and average monthly hours spent gaming
+r <- cor(sample$age, sample$avg_monthly_hrs_gaming)
+
+# create the scatterplot with a regression line
+plot <- ggplot(data = sample, aes(x = age, y = avg_monthly_hrs_gaming)) +
+geom_point() +
+geom_smooth(method = "lm") +
+labs(x = "Age", y = "Average monthly hours spent gaming", title = "Scatterplot of age and average monthly hours spent gaming")
+
+# display the plot and the Pearson correlation coefficient
+plot + annotate("text", x = min(sample$age), y = max(sample$avg_monthly_hrs_gaming), hjust = 0, vjust = 1, label = paste("Pearson correlation coefficient:", round(r, 3)))
+
+
+```
+
+### F: Average Linear Regression of average monthly hours gaming on age
+
+-   The Linear Regression shows that as age increases, there is a negative relationship with average monthly hours spent gaming. As the person gets older there is a reduction in the monthly hours that are played, this is a non-normal residuals linear regression.
+
+```{r echo=FALSE, warning=FALSE}
+# load files reading data from excel file and ggplot to create plots
+library(readxl)
+library(ggplot2)
+
+# reading in the exel data from the excel file located on pc using the read_excel() function and asssigning to the variable data
+data <- read_excel("C:/Users/iviic/OneDrive/Desktop/CA1/amalgamated_game_survey_250_2022 (1).xlsx")
+
+# creating a sample dataset containing 200 rows of data from the data variable, using the sample to radomly select 200 rows 
+sample <- data[sample(nrow(data), 200), ]
+
+model <- lm(sample$avg_monthly_hrs_gaming ~ sample$age)
+
+# ggplot is used to create a scatter plot x being equal to age and y is equal to avg monthly hours 
+ggplot(data = sample, aes(x = age, y = avg_monthly_hrs_gaming)) +
+    geom_point(shape=16, size=3) +
+    geom_line(aes(y = predict(model))) +
+    labs(x = "Age", y = "Average monthly hours gaming", title = "Linear regression of average monthly hours gaming on age") +
+    scale_x_continuous(breaks = seq(20, 50, by = 2)) +
+    scale_y_continuous(breaks = seq(0, 60, by = 5))
+
+
+
+
+```
+
+## **G: References**
+
+-   Youtube -(2021) Riffomonas Project at: <https://www.youtube.com/watch?v=F0yjMJ0BgNA&ab_channel=RiffomonasProject> (Accessed: 10 January 2023)
+
+-   Youtube - Joshua French at: <https://www.youtube.com/watch?v=YlcK9Ef31KE&ab_channel=JoshuaFrench> (Accessed: 12 January 2023)
+
+-   Site - Statistics How to at: <https://www.statisticshowto.com/q-q-plots/> (Accessed: 14 2023)
+
+-   Chapter 8: Introduction to linear regression at: <https://2023-moodle.dkit.ie/pluginfile.php/806309/mod_resource/content/1/OpenIntro%20Statistics%20-%20Chapter%208%20-%20Introduction%20to%20Linear%20Regression.pdf> (Accessed 3 January 2023)
+
+-   Site - Geeks For Geeks at: <https://www.geeksforgeeks.org/shapiro-wilk-test-in-r-programming/> (Accessed 15 January 2023)
+
+-   Site - Data-camp at: <https://www.datacamp.com/tutorial/linear-regression-R> (Accessed 16 January 2023)
+
+-   Site - STHDA at: [http://www.sthda.com/english/wiki/correlation-test-between-two-variables-in-r#:\~:text=Pearson%20correlation%20(r)%2C%20which,named%20the%20linear%20regression%20curve.](http://www.sthda.com/english/wiki/correlation-test-between-two-variables-in-r#:~:text=Pearson%20correlation%20(r)%2C%20which,named%20the%20linear%20regression%20curve.) (Accessed 17 January 2023)
+
+-   Site - Stats and R at: <https://statsandr.com/blog/correlation-coefficient-and-correlation-test-in-r/> (Accessed 18 January 2023)
+
+-   Site - Scribbr at: <https://statsandr.com/blog/correlation-coefficient-and-correlation-test-in-r/> (Accessed 16 January 2023)
